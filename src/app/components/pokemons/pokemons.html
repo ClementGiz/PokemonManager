@@ -31,53 +31,95 @@
     }
   </div>
 
+  <div class="flex justify-center items-center gap-4 mt-8 mb-6">
+    <button
+      (click)="goToPreviousPage()"
+      [disabled]="offset() === 0"
+      class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+    >
+      < Précédents
+    </button>
+
+    <span class="text-gray-600 font-medium">
+      Page {{ (offset() / limit) + 1 }}
+    </span>
+
+    <button
+      (click)="goToNextPage()"
+      [disabled]="pokemons().length < limit"
+      class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+    >
+      Suivants >
+    </button>
+  </div>
   @if (selectedPokemon(); as pokemon) {
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
          (click)="closePopUp()">
 
-      <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl relative" (click)="$event.stopPropagation()">
+      <div class="flex items-center gap-4 max-w-lg w-full mx-4" (click)="$event.stopPropagation()">
 
         <button
-          (click)="closePopUp()"
-          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-xl transition-all duration-300 ease-in-out hover:rotate-90 hover:scale-125 inline-block"
+          (click)="previousPokemon(pokemon)"
+          [disabled]="!hasPrevious(pokemon)"
+          class="p-3 bg-white/20 hover:bg-white/40 text-white rounded-full transition-all disabled:opacity-0 disabled:cursor-not-allowed text-xl font-bold"
+          title="Pokémon précédent"
         >
-          ✕
+          <
         </button>
 
-        <div class="flex flex-col items-center text-center">
-          <div class="flex gap-4">
-            <img [src]="pokemon.sprites.front_default" class="w-24 h-24" alt="Normal" />
-            <img [src]="pokemon.sprites.front_shiny" class="w-24 h-24" alt="Shiny" />
-          </div>
+        <div class="bg-white rounded-2xl p-6 flex-1 shadow-2xl relative">
 
-          <span class="text-xs font-mono text-gray-400">N° {{ pokemon.id }}</span>
-          <h3 class="text-2xl font-black text-gray-800 mb-2">{{ pokemon.displayName }}</h3>
+          <button
+            (click)="closePopUp()"
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-xl transition-all duration-300 ease-in-out hover:rotate-90 hover:scale-125 inline-block"
+          >
+            ✕
+          </button>
 
-          <div class="flex gap-2 mb-4">
-            @for (t of pokemon.types; track t.slot) {
-              <span class="px-3 py-1 bg-blue-500 text-white rounded-full text-xs font-bold uppercase tracking-wider">
-                {{ t.type.frenchName }}
-              </span>
-            }
-          </div>
-          <div class="w-full border-t border-gray-100 pt-4 mt-2">
-            <p
-              class="text-sm text-gray-600 italic bg-gray-50 p-3 rounded-xl border border-gray-100 my-2 leading-relaxed">
-              " {{ pokemon.description }} "
-            </p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 w-full border-t border-gray-100 pt-4 mt-2">
-            <div class="bg-gray-50 p-2 rounded-lg">
-              <span class="text-xs text-gray-400 block uppercase">Taille</span>
-              <strong class="text-gray-700 text-lg">{{ pokemon.height / 10 }} m</strong>
+          <div class="flex flex-col items-center text-center">
+            <div class="flex gap-4">
+              <img [src]="pokemon.sprites.front_default" class="w-24 h-24" alt="Normal" />
+              <img [src]="pokemon.sprites.front_shiny" class="w-24 h-24" alt="Shiny" />
             </div>
-            <div class="bg-gray-50 p-2 rounded-lg">
-              <span class="text-xs text-gray-400 block uppercase">Poids</span>
-              <strong class="text-gray-700 text-lg">{{ pokemon.weight / 10 }} kg</strong>
+
+            <span class="text-xs font-mono text-gray-400">N° {{ pokemon.id }}</span>
+            <h3 class="text-2xl font-black text-gray-800 mb-2">{{ pokemon.displayName }}</h3>
+
+            <div class="flex gap-2 mb-4">
+              @for (t of pokemon.types; track t.slot) {
+                <span class="px-3 py-1 bg-blue-500 text-white rounded-full text-xs font-bold uppercase tracking-wider">
+                  {{ t.type.frenchName }}
+                </span>
+              }
+            </div>
+            <div class="w-full border-t border-gray-100 pt-4 mt-2">
+              <p class="text-sm text-gray-600 italic bg-gray-50 p-3 rounded-xl border border-gray-100 my-2 leading-relaxed">
+                " {{ pokemon.description }} "
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 w-full border-t border-gray-100 pt-4 mt-2">
+              <div class="bg-gray-50 p-2 rounded-lg">
+                <span class="text-xs text-gray-400 block uppercase">Taille</span>
+                <strong class="text-gray-700 text-lg">{{ pokemon.height / 10 }} m</strong>
+              </div>
+              <div class="bg-gray-50 p-2 rounded-lg">
+                <span class="text-xs text-gray-400 block uppercase">Poids</span>
+                <strong class="text-gray-700 text-lg">{{ pokemon.weight / 10 }} kg</strong>
+              </div>
             </div>
           </div>
+
         </div>
+
+        <button
+          (click)="nextPokemon(pokemon)"
+          [disabled]="!hasNext(pokemon)"
+          class="p-3 bg-white/20 hover:bg-white/40 text-white rounded-full transition-all disabled:opacity-0 disabled:cursor-not-allowed text-xl font-bold"
+          title="Pokémon suivant"
+        >
+          >
+        </button>
 
       </div>
     </div>

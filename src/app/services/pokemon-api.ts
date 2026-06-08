@@ -18,9 +18,6 @@ export class PokemonApi {
   // Ajout de ?limit=20 pour s'assurer que l'API renvoie bien les 20 premiers par défaut
   private readonly BASE_URL = 'https://pokeapi.co/api/v2/pokemon?limit=20';
 
-  /**
-   * 1. Charge les 20 Pokémon par défaut avec TOUTES les infos (traductions + description)
-   */
   public getAllPoke(): Observable<Pokemon[]> {
     return this.http.get<PokeApiListResponse>(this.BASE_URL).pipe(
       map((response) => response.results),
@@ -37,9 +34,24 @@ export class PokemonApi {
     );
   }
 
-  /**
-   * 2. Recherche un Pokémon unique par son nom ou ID avec TOUTES ses infos
-   */
+  public switchPoke(offset: number, limit: number = 20): Observable<Pokemon[]> {
+    const url = `${this.BASE_URL}&offset=${offset}&limit=${limit}`;
+
+    return this.http.get<PokeApiListResponse>(url).pipe(
+      map((response) => response.results),
+      switchMap((pokemonList) => {
+        if (pokemonList.length === 0) return of([]);
+
+        const detailRequests = pokemonList.map((p) => {
+          const id = p.url.split('/').filter(Boolean).pop();
+          return this.fetchCompletePokemon(id!);
+        });
+
+        return forkJoin(detailRequests);
+      }),
+    );
+  }
+
   public getPokemonByName(nameOrId: string): Observable<Pokemon | null> {
     const cleanName = nameOrId.toLowerCase().trim();
     return this.fetchCompletePokemon(cleanName).pipe(
