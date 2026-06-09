@@ -1,0 +1,65 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+  <div class="form-card">
+    <div>
+      <h1 class="text-3xl font-extrabold text-center text-gray-900 tracking-tight">
+        Connexion
+      </h1>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Ravi de vous revoir !
+      </p>
+    </div>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="mt-8 space-y-6">
+
+      <div class="space-y-4">
+        <div>
+          <label for="email" class="form-label">
+            Adresse email
+          </label>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            placeholder="vous@exemple.com"
+            class="form-input"          />
+        </div>
+        <div>
+          <label for="password" class="form-label">
+            Mot de passe
+          </label>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="user.password"
+            name="password"
+            required
+            placeholder="******"
+            class="form-input"          />
+        </div>
+      </div>
+      <div>
+        @if (errorMessage) {
+          <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-200">
+            {{ errorMessage }}
+          </div>
+        }
+        <button
+          type="submit"
+          [disabled]="!loginForm.form.valid"
+          class="btn-primary">
+          Se connecter
+        </button>
+      </div>
+    </form>
+    <div class="text-center mt-4">
+      <a
+        routerLink="/register"
+        class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+      >
+        Vous n'avez pas de compte ? <span class="underline">Inscrivez-vous !</span>
+      </a>
+    </div>
+
+  </div>
+</div>

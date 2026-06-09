@@ -20,24 +20,19 @@ export class Pokemons implements OnInit {
   public searchInputValue = signal('');
   private searchSubject = new Subject<string>();
 
-  // --- GESTION DE LA PAGINATION ---
   public offset = signal<number>(0);
   public limit = 20;
   private pageChangeSubject = new Subject<number>();
 
-  // Chargement des Pokémon par défaut basé sur l'offset actuel
   private defaultPokemons = toSignal(
     this.pageChangeSubject.pipe(
       startWith(0), // Charge la première page (offset 0) au démarrage
       switchMap((currentOffset) => {
-        // On passe l'offset actuel au service.
-        // Note : On passe false par défaut car on calcule l'offset directement ici
         return this.pokemonApi.switchPoke(currentOffset, 20);
       }),
     ),
     { initialValue: [] },
   );
-  // --------------------------------
 
   private searchResult = toSignal(
     this.searchSubject.pipe(
@@ -55,7 +50,6 @@ export class Pokemons implements OnInit {
     { initialValue: undefined },
   );
 
-  // Le signal calculé combine la recherche OU la liste paginée par défaut
   public pokemons = computed(() => {
     const search = this.searchResult();
     if (search === undefined) {
@@ -64,7 +58,6 @@ export class Pokemons implements OnInit {
     return search;
   });
 
-  // Permet de savoir dans le HTML si on est en train de chercher (pour masquer les boutons)
   public isSearching = computed(() => this.searchResult() !== undefined);
 
   public selectedPokemon = signal<Pokemon | null>(null);
@@ -78,7 +71,6 @@ export class Pokemons implements OnInit {
     }
   }
 
-  // --- MÉTHODES DE PAGINATION ---
   public goToNextPage() {
     this.offset.update((current) => current + this.limit);
     this.pageChangeSubject.next(this.offset());
@@ -99,7 +91,6 @@ export class Pokemons implements OnInit {
       behavior: 'smooth',
     });
   }
-  // -------------------------------
 
   public openPokemonDetails(pokemon: Pokemon) {
     this.selectedPokemon.set(pokemon);

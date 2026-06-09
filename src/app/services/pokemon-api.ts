@@ -15,7 +15,6 @@ interface PokeApiListResponse {
 @Injectable({ providedIn: 'root' })
 export class PokemonApi {
   private http = inject(HttpClient);
-  // Ajout de ?limit=20 pour s'assurer que l'API renvoie bien les 20 premiers par défaut
   private readonly BASE_URL = 'https://pokeapi.co/api/v2/pokemon?limit=20';
 
   public getAllPoke(): Observable<Pokemon[]> {
@@ -71,7 +70,7 @@ export class PokemonApi {
 
     return forkJoin([dataReq, speciesReq]).pipe(
       switchMap(([pokemonData, speciesData]) => {
-        // Traduction de tous les types en parallèle
+
         const typeRequests = pokemonData.types.map((t: PokemonTypeSlot) =>
           this.http.get<PokemonTypeResponse>(t.type.url).pipe(
             map((typeData) => {
@@ -89,10 +88,7 @@ export class PokemonApi {
 
         return forkJoin(typeRequests).pipe(
           map((translatedTypes: PokemonTypeSlot[]) => {
-            // Extraction du nom français
             const frenchNameObj = speciesData.names.find((n) => n.language.name === 'fr');
-
-            // Extraction et nettoyage de la description française
             const frenchDescObj = speciesData.flavor_text_entries?.find(
               (entry) => entry.language.name === 'fr',
             );

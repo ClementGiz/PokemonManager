@@ -1,0 +1,65 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+  <div class="form-card">
+
+    <div>
+      <h1 class="text-3xl font-extrabold text-center text-gray-900 tracking-tight">
+        Inscription
+      </h1>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Créez votre compte en quelques instants
+      </p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="mt-8 space-y-6">
+      <div class="space-y-4">
+
+        <div>
+          <label for="name" class="form-label">Nom d'utilisateur</label>
+          <input id="name" type="text" [(ngModel)]="user.name" name="name" required placeholder="Votre pseudo" class="form-input" />
+        </div>
+
+        <div>
+          <label for="email" class="form-label">Adresse email</label>
+          <input id="email" type="email" [(ngModel)]="user.email" name="email" required email placeholder="vous@exemple.com" class="form-input" />
+        </div>
+
+        <div>
+          <label for="password" class="form-label">Mot de passe</label>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="user.password"
+            name="password"
+            required
+            minlength="6"
+            pattern="^(?=.*[A-Z])(?=.*\d).+$"
+            #passwordCtrl="ngModel"
+            placeholder="******"
+            class="form-input"
+          />
+
+          @if (passwordCtrl.invalid && (passwordCtrl.dirty || passwordCtrl.touched)) {
+            <div class="text-red-500 text-xs mt-1 space-y-1">
+              @if (passwordCtrl.errors?.['required']) { <p>Le mot de passe est obligatoire.</p> }
+              @if (passwordCtrl.errors?.['minlength']) { <p>Le mot de passe doit contenir au moins 6 caractères.</p> }
+              @if (passwordCtrl.errors?.['pattern']) { <p>Le mot de passe doit contenir au moins une majuscule et un chiffre.</p> }
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <div>
+        @if (errorMessage) {
+          <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-200">
+            {{ errorMessage }}
+          </div>
+        }
+        <button type="submit" [disabled]="!registerForm.form.valid" class="btn-primary">
+          Créer mon compte
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

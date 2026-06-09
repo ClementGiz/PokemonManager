@@ -1,6 +1,10 @@
-<nav class="bg-gray-800 text-white p-4 flex justify-between items-center">
-  <div class="text-xl font-bold">PokéApp</div>
-  <div class="flex gap-4">
+<nav class="bg-gray-800 text-white p-4 flex justify-between items-center w-full">
+
+  <div class="text-xl font-bold flex-1">
+    <a routerLink="/" class="hover:text-gray-300 transition-colors">PokéApp</a>
+  </div>
+
+  <div class="flex gap-6 justify-center flex-1">
     <a
       routerLink="/generations"
       routerLinkActive="text-blue-400 font-bold"
@@ -14,4 +18,26 @@
       Pokémons
     </a>
   </div>
+
+  <div class="flex gap-4 items-center justify-end flex-1">
+    @if (auth.currentUser(); as user) {
+      <a routerLink="/profil" class="hover:text-blue-400 transition-colors text-sm">
+        Bienvenue, <strong class="text-white underline">{{ user.name }}</strong>
+      </a>
+      <button
+        (click)="onLogout()"
+        class="bg-red-600 hover:bg-red-700 text-xs font-medium py-1.5 px-3 rounded transition-colors">
+        Déconnexion
+      </button>
+    }
+    @else {
+      <a
+        routerLink="/login"
+        routerLinkActive="text-blue-400 font-bold"
+        class="hover:text-gray-300 transition-colors">
+        Login
+      </a>
+    }
+  </div>
+
 </nav>

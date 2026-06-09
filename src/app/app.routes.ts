@@ -1,9 +1,22 @@
 import { Routes } from '@angular/router';
-import { Generations } from './components/generations/generations';
-import { Pokemons } from './components/pokemons/pokemons';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
-  { path: 'generations', component: Generations },
-  { path: 'pokemons', component: Pokemons },
+  {
+    path: 'generations',
+    loadComponent: () => import('./components/generations/generations').then((m) => m.Generations),
+  },
+  {
+    path: 'pokemons',
+    loadComponent: () => import('./components/pokemons/pokemons').then((m) => m.Pokemons),
+  },
   { path: '', redirectTo: '/pokemons', pathMatch: 'full' },
+  { path: 'login',
+    loadComponent: () => import('./components/login/login').then((m) => m.Login),},
+  { path : 'profil',
+    loadComponent: () => import('./components/profil/profil').then(m => m.Profil),
+    canActivate: [authGuard]
+  },
+  { path: 'register', loadComponent: () => import('./components/register/register').then((m) => m.Register),},
+  { path: '**', loadComponent: () => import('./components/pokemons/pokemons').then((m) => m.Pokemons) },
 ];
