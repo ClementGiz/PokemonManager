@@ -10,6 +10,7 @@ export const routes: Routes = [
     path: 'pokemons',
     loadComponent: () => import('./components/pokemons/pokemons').then((m) => m.Pokemons),
   },
+  { path : 'pokemons/:id', loadComponent: () => import('./components/pokemon-details/pokemon-details').then((m) => m.PokemonDetails),},
   { path: '', redirectTo: '/pokemons', pathMatch: 'full' },
   { path: 'login',
     loadComponent: () => import('./components/login/login').then((m) => m.Login),},

@@ -4,12 +4,12 @@ import { PokemonApi } from '../../services/pokemon-api';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, map, of, startWith } from 'rxjs';
 import { Pokemon } from '../../models/pokemon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-pokemons',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './pokemons.html',
   styleUrl: './pokemons.css',
 })

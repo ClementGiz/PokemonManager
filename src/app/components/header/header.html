@@ -21,12 +21,12 @@
 
   <div class="flex gap-4 items-center justify-end flex-1">
     @if (auth.currentUser(); as user) {
-      <a routerLink="/profil" class="hover:text-blue-400 transition-colors text-sm">
-        Bienvenue, <strong class="text-white underline">{{ user.name }}</strong>
+      <a routerLink="/profil" class= "h-10 w-10 bg-white rounded-full flex items-center justify-center text-gray-800 font-bold uppercase shadow-sm shrink-0">
+        {{ user.name.charAt(0) }}
       </a>
       <button
         (click)="onLogout()"
-        class="bg-red-600 hover:bg-red-700 text-xs font-medium py-1.5 px-3 rounded transition-colors">
+        class="bg-red-600 hover:bg-red-700 text-xs font-medium py-1.5 px-3 rounded transition-colors cursor-pointer">
         Déconnexion
       </button>
     }
